@@ -1,0 +1,39 @@
+$corners-arg : 40px 10px solid black;
+@mixin corner-style($corners) {
+  $cs:nth($corners,1); //corner-size
+  $bw:nth($corners,2); //border-width
+  $bs:nth($corners,3); //border-style
+  $bc:nth($corners,4); //border-color
+  border:$bw $bs $bc;
+  $-cs:calc(100% - #{$cs});
+  $-cw:calc(100% - #{$bw});
+  $-bw:calc(100% - #{$bw});
+  $-bs:calc(100% - #{$cs});
+  clip-path: polygon(0 0,$cs 0,$cs $bw,$-cs $bw,$-cs 0,100% 0,100% $cs,$-cw $cs,$-cw $-bs,100% $-bs,100% 100%,$-cs 100%,$-cs $-bw,$cs $-bw,$cs 100%,0 100%,0 $-bs,$bw+1px $-bs,$bw+1px $cs,0 $cs);
+}
+html,body{
+  height: 100%;
+}
+body{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+div{
+  @include corner-style($corners-arg);
+  width: 400px;
+  height: 200px;
+  background: repeating-linear-gradient(45deg, #FFF 0, #FFF 10px, #EEE 0, #EEE 20px);
+  animation: resize 10s 2s ease-in-out infinite;
+}
+@mixin size($w,$h){
+  width: $w*1px;//数字加px时用乘法
+  height: $h*1px;
+}
+@keyframes resize {
+  0%,100%{ @include size(400,200); }
+  20% { @include size(100, 400); }
+  40% { @include size(400, 100); }
+  60% { @include size(400, 400); }
+  80% { @include size(200, 250); }
+}
